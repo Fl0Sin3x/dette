@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dette Publique</title>
+    <style>
+        body {
+            margin: 0;
+            background: #2b2ccf;
+            color: #d3d3d3;
+            font-size: 2em;
+            font-family: sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 20px;
+            height: 100px;
+        }
+        img {
+            height: 50px;
+            object-fit: contain;
+            display: block;
+            transform: translateY(-6.5px);
+        }
+        #debt {
+            line-height: 1;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<img src="https://www.lemondemoderne.media/wp-content/uploads/2019/02/logolmm@2x.png" alt="Le Monde Moderne Logo">
+<div id="debt">Chargement...</div>
+
+<script>
+    //Donné qui calcule la dette en via les prévisons de INSEE
+    const startDate = new Date("2025-01-01").getTime(); //
+    const endDate = new Date("2025-12-31").getTime();
+    const startValue = 3305300000000;
+    const endValue = 3515300000000;
+
+    function updateCounter() {
+        // On récupère le timestamp actuel en millisecondes
+        const now = new Date().getTime();
+
+        // Temps écoulé depuis le début de l’année (en secondes)
+        const elapsed = (now - startDate) / 1000;
+        // Durée totale de l’année (du 1er janvier au 31 décembre inclus) en secondes
+        const total = (endDate - startDate) / 1000;
+
+        // Si on est bien dans la plage de l'année
+        if (elapsed >= 0 && elapsed <= total) {
+            // Interpolation linéaire : on calcule la valeur actuelle de la dette
+            // en fonction du temps écoulé dans l'année
+            const counterValue = startValue + ((endValue - startValue) * (elapsed / total));
+            // Formatage du nombre avec des points tous les 3 chiffres
+            const formatted = counterValue.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
+
+            // On injecte la valeur formatée dans l'élément HTML
+            document.getElementById("debt").textContent = formatted;
+        }
+    }
+    // Lancement initial du compteur dès le chargement
+    updateCounter();
+    // Mise à jour toutes les 0.1 secondes pour garder un effet fluide
+    setInterval(updateCounter, 100);
+
+</script>
+</body>
+</html>
